@@ -1,0 +1,68 @@
+<mujoco model="bench">
+  <worldbody>
+    <body name="bench" pos="-0.35 0 0" quat="1 0 0 0">
+      <geom name="seat" type="box" pos="0 0 0.25" size=".25 .9 .05" mass="1." material="seat"/>
+      <geom name="back" type="box" pos="-0.3 0 0.35" size=".05 1. .35" mass="1." quat="1 0 0 0" material="wood"/>
+      <body name="left_arm" pos="0 0.95 0.2" quat="1 0 0 0">
+        <geom name="left_arm" type="box" pos="0 0 0" size=".25 0.05 .2" mass="1." quat="1 0 0 0" material="wood"/>
+      </body>
+      <body name="right_arm" pos="0 -0.95 0.2" quat="1 0 0 0">
+        <geom name="right_arm" type="box" pos="0 0 0" size=".25 0.05 .2" mass="1." quat="1 0 0 0" material="wood"/>
+      </body>
+    </body>
+    <body name="right_hand_target" mocap="true" pos="0.03 -0.2 0.8" quat="1 0 0 0">
+      <geom type="box" pos="0 0 0" size=".01 .1 .1" contype="0" conaffinity="0" rgba="0 1 1 .3"/>
+    </body>
+    <body name="left_hand_target" mocap="true" pos="0.03 0.2 0.8" quat="1 0 0 0">
+      <geom type="box" pos="0 0 0" size=".01 .1 .1" contype="0" conaffinity="0" rgba="1 0 1 .3"/>
+    </body>
+  </worldbody>
+
+  <asset>
+    <material name="seat" rgba="0.5 0.5 0.5 1"/>
+    <material name="wood" rgba="0.5 0.5 0.5 1"/>
+  </asset>
+
+    <keyframe>
+    <!--
+    The values below are split into rows for readibility:
+      torso position :    3
+      torso orientation : 4
+      spinal :            3
+      right leg :         6
+      left leg :          6
+      arms :              6
+      chair :             7
+    -->
+    <key name="home" 
+    qpos="
+        -0.545841313124188
+        0.047658159378007693
+        0.7766175734591888
+        0.97711053248215629
+        -0.01247841069886769
+        -0.13928735696814051
+        -0.16030698290373033
+        0.11790078727672677
+        -0.36361370684902822
+        0.017401928513080221
+        0.098856590703772743
+        0.22397053527348065
+        -1.0849254336509295
+        -1.8018701687565231
+        -0.06668902547819372
+        0.0794812262178124
+        0.13066209175296004
+        -0.46367106896320293
+        -1.1275912567368289
+        -1.7487797691937887
+        -0.10836169397768537
+        -0.64164389294200419
+        0.49023408458900575
+        -0.29192926712879019
+        -1.7594980302991936
+        0.60553562884796808
+        -1.1676593169679554
+        -0.82682315701648712"/> 
+  </keyframe>
+</mujoco>

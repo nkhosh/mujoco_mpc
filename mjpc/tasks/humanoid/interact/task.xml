@@ -1,0 +1,146 @@
+<mujoco model="Humanoid Interact">
+  <include file="../../common.xml"/>
+  <!-- modified from: https://github.com/google-deepmind/dm_control/blob/main/dm_control/suite/humanoid.xml -->
+  <include file="../humanoid_modified.xml" />
+  <!-- <include file="./scenes/armchair.xml"/> -->
+  <!-- <include file="./scenes/armchair_stand.xml"/> -->
+  <!-- <include file="./scenes/armchair_tilted.xml"/> -->
+  <!-- <include file="./scenes/armchair_short.xml"/> -->
+  <!-- <include file="./scenes/armchair_veryshort.xml"/> -->
+  <!-- <include file="./scenes/stool_verytall.xml"/> -->
+  <!-- <include file="./scenes/stool.xml"/> -->
+  <!-- <include file="./scenes/short_stool.xml"/> -->
+  <!-- <include file="./scenes/stool_veryshort.xml"/> -->
+  <!-- <include file="./scenes/stool_floor.xml"/> -->
+  <!-- <include file="./scenes/dining_chair.xml"/> -->
+  <!-- <include file="./scenes/desk.xml"/> -->
+  <!-- <include file="./scenes/desk_short.xml"/> -->
+  <!-- <include file="./scenes/desk_and_armchair.xml"/> -->
+  <!-- <include file="./scenes/climbing_wall.xml"/> -->
+  <!-- <include file="./scenes/moveable_stool.xml"/> -->
+  <!-- <include file="./scenes/hammock.xml"/> -->
+  <include file="./scenes/bench.xml"/>
+  <!-- <include file="./scenes/bench_short.xml"/> -->
+  <!-- <include file="./scenes/bench_tall.xml"/> -->
+  <!-- <include file="./scenes/bench_sidetilted.xml"/> -->
+  <!-- <include file="./scenes/bench_liedownpose.xml"/> -->
+  <!-- <include file="./scenes/bench_hand_target.xml"/> -->
+  <!-- <include file="./scenes/CIO_climb.xml"/> -->
+  <!-- <include file="./scenes/CIO_getup.xml"/> -->
+  <size memory="400K"/>
+
+  <visual>
+    <global offwidth="1280" offheight="1280" />
+  </visual>
+
+  <worldbody>    
+    <camera name="bench" pos="2.016 -0.005 1.089" xyaxes="0.024 1.000 -0.000 -0.261 0.006 0.965"/>
+    <camera name="dc" pos="2.177 2.081 1.466" xyaxes="-0.794 0.607 0.000 -0.134 -0.175 0.975"/>
+    <camera name="sit2stand_side" pos="1.826 -2.287 1.300" xyaxes="0.781 0.624 0.000 -0.106 0.133 0.985"/>
+    <camera name="stool_rotation" pos="2.565 -0.099 0.697" xyaxes="0.013 1.000 0.000 -0.061 0.001 0.998"/>
+    <camera name="cross_leg" pos="1.983 0.083 1.351" xyaxes="-0.012 1.000 0.000 -0.321 -0.004 0.947"/>
+    <camera name="cross_leg_side" pos="0.994 -1.438 0.794" xyaxes="0.722 0.692 0.000 -0.141 0.147 0.979"/>
+    <camera name="dc_armchair" pos="0.421 -2.848 1.801" xyaxes="0.999 -0.039 -0.000 0.015 0.370 0.929"/>
+    <camera name="ldgu" pos="0.849 -3.622 2.002" xyaxes="0.972 0.236 -0.000 -0.082 0.337 0.938"/>
+
+    <!-- <camera name="bench_shuffle" pos="3.262 -2.359 1.567" xyaxes="0.634 0.774 0.000 -0.154 0.126 0.980"/> -->
+    <light pos="0.5 0 1.5" dir="0 0 -1" diffuse="0.7 0.7 0.7" specular="0.3 0.3 0.3"
+        directional="true" castshadow="true"/>
+    <!-- TODO Bring this back: -->
+    <body name="torso_target" mocap="true" pos="0 0 2" quat="1 0 0 0">
+        <!-- <geom type="sphere" size="0.05" contype="0" conaffinity="0" rgba="0 1 0 .5"/> -->
+    </body>
+  </worldbody>
+
+  <custom>
+    <numeric name="agent_planner" data="0" />
+    <numeric name="agent_horizon" data="0.35" />
+    <numeric name="agent_timestep" data="0.015" />
+    <numeric name="sampling_spline_points" data="3" />
+    <numeric name="sampling_exploration" data="0.05" />
+    <numeric name="gradient_spline_points" data="5" />
+    <text name="task_transition" data="Sit Down|Stand Up|Relax|Stay Still" />
+    <text name="contact_transition" data="No Contact|Contact" />
+    <numeric name="residual_Head Height" data="1.4 0 2." />             <!--0-->
+    <numeric name="residual_Torso Height" data="1.3 0 2." />            <!--1-->
+    <numeric name="residual_select_Contact1" data="0"/>                 <!--2-->
+    <text name="residual_list_Contact1" data="None|Point1|Point2"/>     
+    <numeric name="residual_select_Contact2" data="0"/>                 <!--3-->
+    <text name="residual_list_Contact2" data="None|Point1|Point2"/>
+    <numeric name="residual_select_Contact3" data="0"/>                 <!--4-->
+    <text name="residual_list_Contact3" data="None|Point1|Point2"/>
+    <numeric name="residual_select_Contact4" data="0"/>                 <!--5-->
+    <text name="residual_list_Contact4" data="None|Point1|Point2"/>
+    <numeric name="residual_select_Contact5" data="0"/>                 <!--6-->
+    <text name="residual_list_Contact5" data="None|Point1|Point2"/>
+    <numeric name="residual_select_Contact Point" data="0"/>            <!--7-->
+    <text name="residual_list_Contact Point" data="Facing|1|2|3|4|5"/>
+    <numeric name="residual_select_Facing Dir" data="0"/>               <!--8-->
+    <text name="residual_list_Facing Dir" data="OFF|ON"/>
+    <numeric name="residual_Dist. Tolerance" data="0.1 0. 2."/>          <!--9-->
+    <numeric name="residual_Time Limit" data="2. 0 10." />               <!--10-->
+    <numeric name="residual_Sustain Time" data="1. 0 5." />              <!--11-->
+  </custom>
+  
+  <sensor>
+    <user name="Torso Up" dim="1" user="6 10.0 0.0 100.0 0.1" />
+    <user name="Pelvis Up" dim="1" user="6 10.0 0.0 100.0 0.1" />
+    <user name="RFoot Up" dim="1" user="6 5.0 0.0 100.0 0.1" />
+    <user name="LFoot Up" dim="1" user="6 5.0 0.0 100.0 0.1" />
+    <user name="Head Height" dim="1" user="6 0.0 0.0 100.0 0.1" />
+    <user name="Torso Height" dim="1" user="6 20.0 0.0 100.0 0.1" />
+    <user name="Knee Feet XY" dim="1" user="6 30.0 0.0 100.0 0.1" />
+    <user name="COM Feet XY" dim="1" user="6 0.0 0.0 100.0 0.1" />
+    <user name="Facing Dir" dim="1" user="6 0.0 0.0 100.0 0.1" />
+    <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0" />
+    <user name="Joint Vel." dim="21" user="0 0.01 0.0 10." />
+    <user name="Control" dim="21" user="3 .8 0.0 5. 0.05" />
+    <user name="Contact" dim="15" user="6 100.0 0.0 100.0 0.1" /> 
+    <framepos name="floor" objtype="geom" objname="floor"/>
+    <framepos name="trace0" objtype="body" objname="torso"/>
+    <framepos name="torso_position" objtype="body" objname="torso"/>
+    <framepos name="head_position" objtype="body" objname="head"/>
+    <framepos name="waist_position" objtype="geom" objname="waist_lower"/>
+    <framepos name="butt_position" objtype="geom" objname="butt"/>
+    <framepos name="pelvis_position" objtype="body" objname="pelvis"/>
+    <framequat name="head_orientation" objtype="body" objname="head"/>
+    <framezaxis name="torso_zaxis" objtype="body" objname="torso"/>
+    <framezaxis name="torso_up" objtype="xbody" objname="torso"/>
+    <framezaxis name="pelvis_up" objtype="xbody" objname="pelvis"/>    
+    <framezaxis name="foot_right_up" objtype="xbody" objname="foot_right"/>
+    <framezaxis name="foot_left_up" objtype="xbody" objname="foot_left"/>
+    <framezaxis name="thigh_right_up" objtype="xbody" objname="thigh_right"/>
+    <framezaxis name="thigh_left_up" objtype="xbody" objname="thigh_left"/>
+    <framezaxis name="shin_right_up" objtype="xbody" objname="shin_right"/>
+    <framezaxis name="shin_left_up" objtype="xbody" objname="shin_left"/>
+    <framelinvel name="torso_subtreelinvel" objtype="body" objname="torso" />
+    <subtreecom name="torso_subtreecom" body="torso"/>
+    <framexaxis name="torso_forward" objtype="body" objname="torso" />    
+    <framepos name="sp0" objtype="site" objname="sp0"/>
+    <framepos name="sp1" objtype="site" objname="sp1"/>
+    <framepos name="sp2" objtype="site" objname="sp2"/>
+    <framepos name="sp3" objtype="site" objname="sp3"/>    
+    <framezaxis name="sp0_zaxis" objtype="site" objname="sp0"/>
+    <framezaxis name="sp1_zaxis" objtype="site" objname="sp1"/>
+    <framezaxis name="sp2_zaxis" objtype="site" objname="sp2"/>
+    <framezaxis name="sp3_zaxis" objtype="site" objname="sp3"/>
+    <framepos name="foot_right" objtype="body" objname="foot_right"/>
+    <framepos name="foot_left" objtype="body" objname="foot_left"/>
+    <framepos name="knee_right" objtype="body" objname="shin_right"/>
+    <framepos name="knee_left" objtype="body" objname="shin_left"/>
+    <framepos name="heel_left" objtype="body" objname="heel_left"/>
+    <framepos name="heel_right" objtype="body" objname="heel_right"/>
+    <framepos name="shin_right" objtype="geom" objname="shin_right"/>
+    <framepos name="shin_left" objtype="geom" objname="shin_left"/>
+    <framepos name="thigh_right" objtype="geom" objname="thigh_right"/>
+    <framepos name="thigh_left" objtype="geom" objname="thigh_left"/>
+    <framepos name="lower_arm_right" objtype="body" objname="lower_arm_right"/>
+    <framepos name="lower_arm_left" objtype="body" objname="lower_arm_left"/> 
+    <framepos name="hand_left" objtype="geom" objname="hand_left"/>
+    <framepos name="hand_right" objtype="geom" objname="hand_right"/>
+    <framepos name="torso_target" objtype="body" objname="torso_target"/>
+    <subtreelinvel name="foot_right_vel" body="foot_right"/>
+    <subtreelinvel name="foot_left_vel" body="foot_left"/>
+  </sensor>
+
+</mujoco>

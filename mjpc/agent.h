@@ -177,6 +177,7 @@ class Agent {
   int allocate_enabled;
   int plot_enabled;
   int gui_task_id = 0;
+  int gui_scene_id = 0;
 
   // state
   mjpc::State state;

@@ -1,0 +1,61 @@
+<mujoco model="chair">
+  <worldbody>
+    <body name="chair" pos="-0.32 0 0.1" quat="0.99 0 -0.13 0">
+      <geom name="seat" type="box" pos="0 0 0.12" size=".25 .35 .05" mass="10." material="seat"/>
+      <geom name="seat_base" type="box" pos="-0.12 0 -0.05" size=".30 .35 .15" mass="10." material="back"/>
+      <geom name="back" type="box" pos="-0.35 0 0.35" size=".05 0.35 .3" quat="0.984 0 -0.178 0" mass="10."  material="back"/>
+      <geom name="chair_leg_1" type="box" pos="-0.12 0.35 0.1" size=".3 0.05 .3" mass="5." quat="1 0 0 0" material="legs"/>
+      <geom name="chair_leg_2" type="box" pos="-0.12 -0.35 0.1" size=".3 0.05 .3" mass="5." quat="1 0 0 0" material="legs"/>
+    </body>
+  </worldbody>
+
+  <asset>
+    <material name="seat" rgba="0.2  0.12  0.1 1"/>
+    <material name="back" rgba="0.25  0.12  0.1 1"/>
+    <material name="legs" rgba="0.3  0.12  0.1 1"/>
+  </asset>
+
+
+  <keyframe>
+    <!--
+    The values below are split into rows for readibility:
+      torso position :    3
+      torso orientation : 4
+      spinal :            3
+      right leg :         6
+      left leg :          6
+      arms :              6
+      chair :             7
+    -->
+    <key name="home" 
+    qpos="-0.4     
+  -0.042   
+   0.86    
+   1       
+   0.072   
+   0.0022  
+   0.065   
+  -0.036   
+  -0.12    
+  -0.089   
+   0.047   
+  -0.24    
+  -1.7     
+  -1.9     
+   0.13    
+  -0.075   
+   0.14    
+  -0.074   
+  -1.6     
+  -1.8     
+   0.067   
+   0.037   
+   0.62    
+  -0.8     
+  -0.75    
+   0.82    
+  -0.55    
+  -1.8"/>
+  </keyframe>
+
+</mujoco>

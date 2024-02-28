@@ -1,0 +1,7 @@
+<mujoco model="box">
+  <worldbody>
+    <body name="box" pos="0 0 0" quat="1 0 0 0">
+      <geom name="base" type="box" pos="1.5 0 0.3" size="0.6 0.8 0.3" mass="0.001"/>
+    </body>
+  </worldbody>
+</mujoco>

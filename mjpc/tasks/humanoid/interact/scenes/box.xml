@@ -1,0 +1,12 @@
+<mujoco model="box">
+  <worldbody>
+    <body name="box" pos="1.2 0 0.5" quat="1 0 0 0">
+      <freejoint/>
+      <geom name="base" type="box" pos="0 0 0" size=".4 .3 .5" mass="10." material="mat"/>
+    </body>
+  </worldbody>
+
+  <asset>
+    <material name="mat" rgba="0.5 0.25 0.04 1"/>
+  </asset>
+</mujoco>

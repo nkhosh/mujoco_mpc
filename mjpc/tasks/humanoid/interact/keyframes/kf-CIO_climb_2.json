@@ -1,0 +1,109 @@
+{
+    "contacts": [
+        {
+            "body1": 7,
+            "body2": 0,
+            "contact_type": 0,
+            "geom1": 9,
+            "geom2": 0,
+            "local_pos1": [
+                0.07614855702060568,
+                0.004856881059524684,
+                -0.01920690530043912
+            ],
+            "local_pos2": [
+                0.21126626966501216,
+                -0.08413397623500196,
+                0.0
+            ]
+        },
+        {
+            "body1": 20,
+            "body2": 0,
+            "contact_type": 0,
+            "geom1": 19,
+            "geom2": 0,
+            "local_pos1": [
+                0.03693306956087328,
+                -0.01514819862964406,
+                0.002545673012785299
+            ],
+            "local_pos2": [
+                0.47107783235508893,
+                0.42927429786479987,
+                0.0
+            ]
+        },
+        {
+            "body1": 12,
+            "body2": 0,
+            "contact_type": 0,
+            "geom1": 12,
+            "geom2": 0,
+            "local_pos1": [
+                0.10453578187790769,
+                -0.007905736736942472,
+                -0.019540556433931995
+            ],
+            "local_pos2": [
+                0.43414796621651064,
+                0.23525860891596584,
+                0.0
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    ],
+    "facing_target": [],
+    "name": "CIO_climb_2",
+    "success_sustain_time": 2.0,
+    "target_distance_tolerance": 0.1,
+    "time_limit": 5.0,
+    "weight": {
+        "COM Feet XY": 0.0,
+        "CoM Vel.": 0.0,
+        "Contact": 80.0,
+        "Control": 0.1,
+        "Facing Dir": 0.0,
+        "Head Height": 0.0,
+        "Joint Vel.": 0.01,
+        "Knee Feet XY": 30.0,
+        "LFoot Up": 54.0,
+        "Pelvis Up": 10.0,
+        "RFoot Up": 51.5,
+        "Torso Height": 0.0,
+        "Torso Up": 11.0
+    }
+}

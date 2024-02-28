@@ -1,0 +1,111 @@
+{
+    "name": "armchair_relax3",
+    "contacts": [
+        {
+            "body1": 4,
+            "body2": 21,
+            "geom1": 5,
+            "geom2": 20,
+            "contact_type": 0,
+            "local_pos1": [
+                -0.084515,
+                -0.003438,
+                -0.062752
+            ],
+            "local_pos2": [
+                0.038509,
+                0.001444,
+                0.17
+            ]
+        },
+        {
+            "body1": 1,
+            "body2": 21,
+            "geom1": 2,
+            "geom2": 22,
+            "contact_type": 0,
+            "local_pos1": [
+                -0.066968,
+                0.003691,
+                -0.138831
+            ],
+            "local_pos2": [
+                -0.294421,
+                0.257243,
+                0.344129
+            ]
+        },
+        {
+            "body1": 6,
+            "body2": 21,
+            "geom1": 7,
+            "geom2": 20,
+            "contact_type": 0,
+            "local_pos1": [
+                -0.043896,
+                -0.021775,
+                -0.069169
+            ],
+            "local_pos2": [
+                0.25,
+                -0.346188,
+                0.155922
+            ]
+        },
+        {
+            "body1": 12,
+            "body2": 0,
+            "geom1": 12,
+            "geom2": 0,
+            "contact_type": 0,
+            "local_pos1": [
+                0.066571,
+                -0.012282,
+                -0.0248
+            ],
+            "local_pos2": [
+                0.11838,
+                -0.178174,
+                0.0
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "geom1": -1,
+            "geom2": -1,
+            "contact_type": 0,
+            "local_pos1": [
+                -0.08998,
+                0.011944,
+                -0.056593
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    ],
+    "facing_target": [],
+    "torso_target": [],
+    "target_distance_tolerance": 0.3,
+    "time_limit": 5.0,
+    "success_sustain_time": 1.0,
+    "weight": {
+        "Torso Up": 0.0,
+        "Pelvis Up": 0.0,
+        "RFoot Up": 5.0,
+        "LFoot Up": 5.0,
+        "Head Height": 0.0,
+        "Torso Height": 20.0,
+        "Knee Feet XY": 30.0,
+        "COM Feet XY": 0.0,
+        "Facing Dir": 0.0,
+        "Torse Target": 0.0,
+        "CoM Vel.": 10.0,
+        "Joint Vel.": 0.01,
+        "Control": 0.2,
+        "Contact": 100.0
+    }
+}

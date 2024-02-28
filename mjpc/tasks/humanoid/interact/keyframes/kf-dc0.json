@@ -1,0 +1,114 @@
+{
+    "contacts": [
+        {
+            "body1": 17,
+            "body2": 21,
+            "contact_type": 0,
+            "geom1": 16,
+            "geom2": 20,
+            "local_pos1": [
+                0.023724,
+                0.028041,
+                0.015839
+            ],
+            "local_pos2": [
+                0.222266,
+                -0.068316,
+                -0.65
+            ]
+        },
+        {
+            "body1": 20,
+            "body2": 21,
+            "contact_type": 0,
+            "geom1": 19,
+            "geom2": 20,
+            "local_pos1": [
+                0.013216,
+                -0.036975,
+                0.007628
+            ],
+            "local_pos2": [
+                0.235804,
+                0.38269,
+                -0.65
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.001054,
+                -0.049976,
+                -0.001148
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "body1": 1,
+            "body2": 0,
+            "contact_type": 0,
+            "geom1": 1,
+            "geom2": 0,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.46436500000000003,
+                0.217577,
+                0.970778
+            ]
+        }
+    ],
+    "facing_target": [
+        0.661723,
+        0.273219,
+        1.163555
+    ],
+    "name": "dc0",
+    "success_sustain_time": 0.1,
+    "target_distance_tolerance": 0.3,
+    "time_limit": 5.0,
+    "weight": {
+        "COM Feet XY": 0.0,
+        "CoM Vel.": 10.0,
+        "Contact": 100.0,
+        "Control": 0.025,
+        "Facing Dir": 0.0,
+        "Head Height": 80.0,
+        "Joint Vel.": 0.01,
+        "Knee Feet XY": 30.0,
+        "LFoot Up": 5.0,
+        "Pelvis Up": 0.0,
+        "RFoot Up": 5.0,
+        "Torse Target": 0.0,
+        "Torso Height": 80.0,
+        "Torso Up": 0.0
+    }
+}

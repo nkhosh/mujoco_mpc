@@ -22,6 +22,10 @@
 
 #include <mujoco/mujoco.h>
 #include "mjpc/norm.h"
+#include "mjpc/evaluator.h"
+
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 namespace mjpc {
 
@@ -126,6 +130,7 @@ class Task {
 
   // mode
   int mode;
+  int contact_mode;
 
   // GUI toggles
   int reset = 0;
@@ -140,7 +145,16 @@ class Task {
   std::vector<NormType> norm;
   std::vector<double> weight;
   std::vector<double> norm_parameter;
+  std::vector<std::string> weight_names;
+
   double risk;
+  int kf_index = 0;
+  char kf_name[mjMAXUITEXT] = "";
+  int kf_weights = true;
+
+  // evaluation stats
+  mjpc::Evaluator evaluator;
+  bool evaluation_mode = false;
 
   // residual parameters
   std::vector<double> parameters;

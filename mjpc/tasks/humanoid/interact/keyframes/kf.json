@@ -1,0 +1,74 @@
+{
+    "home_key_name": "home_standtosit",
+    "keyframes": [
+        {
+            "name": "kf1",
+            "time_threshold": 5,
+            "distance_threshold": 0.1,
+            "max_duration": 1,
+            "contacts": [
+                {
+                    "body1": -1,
+                    "body2": -1,
+                    "geom1": -1,
+                    "geom2": -1,
+                    "type": "kTouch",
+                    "pos1": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "pos2": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "body1": -1,
+                    "body2": -1,
+                    "geom1": -1,
+                    "geom2": -1,
+                    "type": "kTouch",
+                    "pos1": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "pos2": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "facing_target": [
+                0,
+                0,
+                0
+            ],
+            "torso_target": [
+                0,
+                0,
+                0
+            ],
+            "weight": {
+                "torso_up": 0,
+                "pelvis_up": 10,
+                "rfoot_up": 5,
+                "lfoot_up": 5,
+                "head_height": 0,
+                "torso_height": 20,
+                "knee_feet_xy": 30,
+                "com_feet_xy": 30,
+                "torso_target": 0,
+                "facing_dir": 0,
+                "com_vel": 10,
+                "joint_vel": 0,
+                "control": 0,
+                "contact": 0,
+                "grasp": 0
+            }
+        }
+    ]
+}

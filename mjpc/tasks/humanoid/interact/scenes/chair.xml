@@ -1,0 +1,20 @@
+<mujoco model="chair">
+  <worldbody>
+    <body name="chair" pos="-0.35 0 0.2" quat="0 0 1 0">
+      <freejoint/>
+      <geom name="seat" type="box" pos="0 0 -0.15" size=".25 .3 .05" mass="1." material="seat"/>
+      <geom name="back" type="box" pos="0.3 0 -0.3" size=".05 0.4 .5" mass="1." quat="1 0 0 0" material="wood"/>
+      <body name="left_arm" pos="0 0.35 -0.1" quat="0 1 0 0">
+        <geom name="left_arm" type="box" pos="0 0 0" size=".25 0.05 .3" mass="1." quat="1 0 0 0" material="wood"/>
+      </body>
+      <body name="right_arm" pos="0 -0.35 -0.1" quat="0 1 0 0">
+        <geom name="right_arm" type="box" pos="0 0 0" size=".25 0.05 .3" mass="1." quat="1 0 0 0" material="wood"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <asset>
+    <material name="seat" rgba="0.5 0.25 0.04 1"/>
+    <material name="wood" rgba="0.6 0.32 0.07 1"/>
+  </asset>
+</mujoco>

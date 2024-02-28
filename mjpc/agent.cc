@@ -41,6 +41,7 @@
 #include "mjpc/threadpool.h"
 #include "mjpc/trajectory.h"
 #include "mjpc/utilities.h"
+#include "mjpc/tasks/humanoid/interact/interact.h"
 
 namespace mjpc {
 namespace mju = ::mujoco::util_mjpc;
@@ -527,6 +528,16 @@ void Agent::GUI(mjUI& ui) {
       {mjITEM_CHECKINT, "Reset", 2, &ActiveTask()->reset, " #459"},
       {mjITEM_CHECKINT, "Visualize", 2, &ActiveTask()->visualize, ""},
       {mjITEM_SELECT, "Model", 1, &gui_task_id, ""},
+      {mjITEM_SELECT, "Scene", 1, &gui_scene_id, ""},
+      {mjITEM_BUTTON, "Add keyframe", 2, nullptr, ""},      // 4
+      {mjITEM_BUTTON, "Remove keyframe", 2, nullptr, ""},   // 5   
+      {mjITEM_BUTTON, "Edit keyframe", 2, nullptr, ""},     // 6
+      {mjITEM_BUTTON, "Next keyframe", 2, nullptr, ""},     // 7
+      {mjITEM_BUTTON, "Save keyframe", 2, nullptr, ""},     // 8
+      {mjITEM_BUTTON, "Load keyframe", 2, nullptr, ""},     // 9
+      {mjITEM_BUTTON, "Clear keyframes", 2, nullptr, ""},   // 10
+      {mjITEM_BUTTON, "Save sequence", 2, nullptr, ""},   // 11
+      {mjITEM_BUTTON, "Load sequence", 2, nullptr, ""},   // 12
       {mjITEM_SLIDERNUM, "Risk", 1, &ActiveTask()->risk, "-1 1"},
       {mjITEM_SEPARATOR, "Weights", 1},
       {mjITEM_END}};
@@ -640,6 +651,35 @@ void Agent::GUI(mjUI& ui) {
 
     mjui_add(&ui, defTransition);
   }
+  
+  char* contact_modes = GetCustomTextData(model_, "contact_transition");
+
+  if (contact_modes) {
+    mjuiDef defTransition[] = {
+        {mjITEM_SEPARATOR, "Contact Modes", 1},
+        {mjITEM_RADIO, "", 1, &ActiveTask()->contact_mode, ""},
+        {mjITEM_END},
+    };
+
+    // concatenate mode_names
+    int len = strlen(contact_modes);
+    std::string str;
+    for (int i = 0; i < len; i++) {
+      if (contact_modes[i] == '|') {
+        str.push_back('\n');
+      } else {
+        str.push_back(contact_modes[i]);
+      }
+    }
+
+    // update buttons
+    mju::strcpy_arr(defTransition[1].other, str.c_str());
+
+    // set tolerance limits
+    mju::sprintf_arr(defTransition[2].other, "%f %f", 0.0, 1.0);
+
+    mjui_add(&ui, defTransition);
+  }
 
   // ----- agent ----- //
   mjuiDef defAgent[] = {{mjITEM_SECTION, "Agent", 1, nullptr, "AP"},
@@ -707,6 +747,51 @@ void Agent::TaskEvent(mjuiItem* it, mjData* data,
       allocate_enabled = true;
       // request model loading
       uiloadrequest.fetch_add(1);
+      break;
+    case 4:  // add keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") { 
+        ((mjpc::humanoid::Interact*)ActiveTask())->AddKeyframe();
+      }
+      break;
+    case 5:  // remove keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->RemoveKeyframe();
+      }
+      break;
+    case 6:  // edit current keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->EditKeyframe();
+      }
+      break;
+    case 7:  // next keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->NextKeyframe();
+      }
+      break;
+    case 8:  // save current keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->SaveKeyframe();
+      }
+      break;
+    case 9:  // load onto current keyframe
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->LoadKeyframe();
+      }
+      break;
+    case 10:  // clear all keyframes
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->ClearKeyframes();
+      }
+      break;
+    case 11:  // save a sequence of keyframes
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->SaveKeyframeSequence();
+      }
+      break;
+    case 12:  // load a sequence of keyframes
+      if (ActiveTask()->Name() == "Humanoid Interact") {
+        ((mjpc::humanoid::Interact*)ActiveTask())->LoadKeyframeSequence();
+      }
       break;
   }
 }

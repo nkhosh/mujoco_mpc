@@ -1,0 +1,109 @@
+{
+    "contacts": [
+        {
+            "body1": 20,
+            "body2": 25,
+            "contact_type": 0,
+            "geom1": 19,
+            "geom2": 25,
+            "local_pos1": [
+                0.023101559220795074,
+                -0.022848316191971738,
+                0.023329646563111282
+            ],
+            "local_pos2": [
+                -0.009999999999999981,
+                -0.07585587618311046,
+                -0.08106457280098134
+            ]
+        },
+        {
+            "body1": 17,
+            "body2": 24,
+            "contact_type": 0,
+            "geom1": 16,
+            "geom2": 24,
+            "local_pos1": [
+                0.02221192015090158,
+                0.02587539610551537,
+                0.02090680462413829
+            ],
+            "local_pos2": [
+                -0.009999999999999981,
+                0.08031379561615773,
+                -0.0773326447304693
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "body1": -1,
+            "body2": -1,
+            "contact_type": 0,
+            "geom1": -1,
+            "geom2": -1,
+            "local_pos1": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "local_pos2": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    ],
+    "facing_target": [],
+    "name": "partwise_arms_0",
+    "success_sustain_time": 1.0,
+    "target_distance_tolerance": 0.1,
+    "time_limit": 5.0,
+    "weight": {
+        "COM Feet XY": 0.0,
+        "CoM Vel.": 10.0,
+        "Contact": 100.0,
+        "Control": 0.8,
+        "Facing Dir": 0.0,
+        "Head Height": 0.0,
+        "Joint Vel.": 0.5,
+        "Knee Feet XY": 30.0,
+        "LFoot Up": 5.0,
+        "Pelvis Up": 0.0,
+        "RFoot Up": 5.0,
+        "Torso Height": 0.0,
+        "Torso Up": 30.0
+    }
+}

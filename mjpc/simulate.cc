@@ -33,6 +33,7 @@
 #include "mjpc/array_safety.h"
 #include "mjpc/agent.h"
 #include "mjpc/utilities.h"
+#include "mjpc/tasks/humanoid/interact/interact.h"
 
 // When launched via an App Bundle on macOS, the working directory is the path
 // to the App Bundle's resource directory. This causes files to be saved into
@@ -1506,6 +1507,19 @@ void UiEvent(mjuiState* state) {
                                (state->x - r.left)/r.width,
                                (state->y - r.bottom)/r.height,
                                &sim->scn, selpnt, &selgeom, &selflex, &selskin);
+
+      // Pass on the selected point to the humanoid interact task
+      if (sim->agent->ActiveTask()->Name() == "Humanoid Interact") {
+        int bodyid = m->geom_bodyid[selgeom];
+
+        // compute localpos
+        mjtNum tmp[3];
+        mjtNum sellocalpos[3];
+        mju_sub3(tmp, selpnt, d->xpos+3*bodyid);
+        mju_mulMatTVec(sellocalpos, d->xmat+9*bodyid, tmp, 3, 3);
+
+        ((mjpc::humanoid::Interact*)sim->agent->ActiveTask())->SetSelectedPoint(sellocalpos, bodyid, selgeom);
+      }
 
       // set lookat point, start tracking is requested
       if (selmode==2 || selmode==3) {
