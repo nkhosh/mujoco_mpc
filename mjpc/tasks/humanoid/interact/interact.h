@@ -113,7 +113,6 @@ class Interact : public Task {
   };
 
   Interact() : residual_(this) {}
-              //  motion_strategy_(evaluator.episode.motion_strategy) {}
 
   void TransitionLocked(mjModel* model, mjData* data) override;
 
@@ -154,11 +153,19 @@ class Interact : public Task {
  private:
   ResidualFn residual_;
 
+  MotionStrategy motion_strategy_;
+
   // draw task-related geometry in the scene
   void ModifyScene(const mjModel* model, const mjData* data,
                    mjvScene* scene) const override;
+  double GetPhaseDuration(const mjData* data) const { return data->time - phase_start_time; }
+  double GetSuccessSustainTime(const mjData* data) const { return data->time - first_success_time; }
                    
   bool kf_index_updated;
+
+  double phase_start_time = 0.; 
+  double first_success_time = 0.;
+  double kf_distance_error = 0.;
 };
 
 }  // namespace humanoid

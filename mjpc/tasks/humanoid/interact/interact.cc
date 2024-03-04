@@ -204,7 +204,7 @@ void Interact::ResidualFn::Residual(const mjModel* model,
 // ---------------------------------------------
 void Interact::TransitionLocked(mjModel* model, mjData* data) {
 
-  ContactKeyframe& current_keyframe = evaluator.episode.motion_strategy.GetCurrentKeyframe();
+  ContactKeyframe& current_keyframe = motion_strategy_.GetCurrentKeyframe();
 
   // ---------------------------- Task mode handling -------------------------------------
   if (residual_.current_mode_ != mode) {
@@ -221,10 +221,7 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
   if (residual_.current_contact_mode_ != contact_mode) {
     residual_.current_contact_mode_ = (ContactMode)contact_mode;
     kf_index_updated = true;
-    // if (!evaluator.is_reoptimizing) {
-      kf_index = 0;
-      evaluator.episode.current_phase_index = 0;
-    // }
+    kf_index = 0;
   }
 
   // --------------------------- Keyframe sequence handling -------------------------------
@@ -232,85 +229,47 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
       SyncWeightsToKeyframe(current_keyframe);
   }
 
-  if (evaluator.episode.motion_strategy.HasKeyframes() && !evaluator.is_replaying && !evaluator.is_replaying_phase) {
-    while (evaluator.episode.motion_phases.size() < evaluator.episode.motion_strategy.GetKeyframesCount()) {
-      evaluator.episode.motion_phases.push_back(MotionPhase());
-    }
-    while (evaluator.episode.motion_phases.size() > evaluator.episode.motion_strategy.GetKeyframesCount()) {
-      evaluator.episode.motion_phases.pop_back();
-    }
-
+  if (motion_strategy_.HasKeyframes()) {
     if ((ContactMode)contact_mode == kContact) {
-      double kf_distance_error = CalculateKeyframeError(current_keyframe, data);
-      evaluator.kf_distance_error = kf_distance_error;
+      kf_distance_error = CalculateKeyframeError(current_keyframe, data);
+       
       // the case where the episode fails due to time out, we restart the simulation and go to next episode
-      if (evaluator.GetPhaseDuration(data) > current_keyframe.time_limit &&
+      if (GetPhaseDuration(data) > current_keyframe.time_limit &&
               kf_distance_error >= current_keyframe.target_distance_tolerance) {
-        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
-
-        // don't go to the next episode if we are reoptimizing
-        // if (!evaluator.is_reoptimizing) {
-          kf_index = 0;
-          kf_index_updated = true;
-          // evaluator.reset_sim_required = true;
-          // evaluator.GoToNextEpisode(false, evaluation_mode);
-        // }
+        kf_index = 0;
+        kf_index_updated = true;
       }
       // the case where the episode succeeds, we restart the simulation and go to next episode
-      else if (kf_index == evaluator.episode.motion_strategy.GetKeyframesCount() - 1 &&
+      else if (kf_index == motion_strategy_.GetKeyframesCount() - 1 &&
           kf_distance_error <= current_keyframe.target_distance_tolerance &&
-          evaluator.GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
-        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
-
-        // don't go to the next episode if we are reoptimizing
-        // if (!evaluator.is_reoptimizing) {
+          GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
           kf_index = 0;
           kf_index_updated = true;
-          evaluator.first_success_time = data->time;
-          // evaluator.reset_sim_required = true;
-          // evaluator.GoToNextEpisode(true, evaluation_mode);
-        // }
+          first_success_time = data->time;
       }
       // the case where the current keyframe succeeds, we move on to the next keyframe within the same episode
       else if (kf_distance_error <= current_keyframe.target_distance_tolerance &&
-          evaluator.GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
-        // evaluator.episode.GetCurrentPhase().success = true;
-        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
-        
-        // SimState current_state = evaluator.episode.GetCurrentPhase().GetLastState();
-        // evaluator.episode.GetCurrentPhase().fixed = true;
-
+          GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
         kf_index++;
-        evaluator.episode.current_phase_index = kf_index;
-        // evaluator.episode.GetCurrentPhase().SetStartState(current_state);
-        // evaluator.episode.GetCurrentPhase().AddState(current_state);
 
         kf_index_updated = true;
-        // evaluator.phase_start_time = data->time;
-        evaluator.first_success_time = data->time;
+        phase_start_time = data->time;
+        first_success_time = data->time;
       }
       // the case where the distance error is more than the tolerance, we reset success timer
       else if (kf_distance_error > current_keyframe.target_distance_tolerance) {
         // reset success timer
-        evaluator.first_success_time = data->time;
+        first_success_time = data->time;
       }
-      
-      // when we have the set number of episodes we save the episodes data and reset the evaluator
-      // if (evaluation_mode && evaluator.episode_count >= evaluator.max_num_episodes) {
-      //   // Save the evaluation info
-      //   evaluator.SaveData();
-      //   evaluation_mode = false; 
-      //   evaluator.Reset();
-      // }
     }
 
-    assert(kf_index < evaluator.episode.motion_strategy.GetKeyframesCount());
+    assert(kf_index < motion_strategy_.GetKeyframesCount());
 
     // --------------------------- Updating keyframe -------------------------------------------
     if (kf_index_updated) {
       // current_keyframe_ = contact_keyframes_.at(kf_index);
-      evaluator.episode.motion_strategy.UpdateCurrentKeyframe(kf_index);
-      ContactKeyframe current_keyframe = evaluator.episode.motion_strategy.GetCurrentKeyframe();
+      motion_strategy_.UpdateCurrentKeyframe(kf_index);
+      ContactKeyframe current_keyframe = motion_strategy_.GetCurrentKeyframe();
       residual_.residual_keyframe_ = current_keyframe;
       if (kf_weights && !current_keyframe.weight.empty()) {
         SyncWeightsFromKeyframe(current_keyframe);
@@ -323,69 +282,69 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
 }
 
 void Interact::AddKeyframe() {
-  SyncWeightsToKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-  evaluator.episode.motion_strategy.AddCurrentKeyframe(kf_name);
+  SyncWeightsToKeyframe(motion_strategy_.GetCurrentKeyframe());
+  motion_strategy_.AddCurrentKeyframe(kf_name);
   kf_index_updated = true;
 }
 
 void Interact::NextKeyframe() {
-  kf_index = evaluator.episode.motion_strategy.NextKeyframe();
-  // SyncWeightsFromKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
+  kf_index = motion_strategy_.NextKeyframe();
+  // SyncWeightsFromKeyframe(motion_strategy_.GetCurrentKeyframe());
   kf_index_updated = true;
 }
 
 void Interact::RemoveKeyframe() {
-  if (evaluator.episode.motion_strategy.RemoveCurrentKeyframe()) {
-    SyncWeightsFromKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-    kf_index = evaluator.episode.motion_strategy.GetCurrentKeyframeIndex();
+  if (motion_strategy_.RemoveCurrentKeyframe()) {
+    SyncWeightsFromKeyframe(motion_strategy_.GetCurrentKeyframe());
+    kf_index = motion_strategy_.GetCurrentKeyframeIndex();
     kf_index_updated = true;
   }
 }
 
 void Interact::ClearKeyframes() {
-  evaluator.episode.motion_strategy.ClearKeyframes();
-  kf_index = evaluator.episode.motion_strategy.GetCurrentKeyframeIndex();
+  motion_strategy_.ClearKeyframes();
+  kf_index = motion_strategy_.GetCurrentKeyframeIndex();
   residual_.residual_keyframe_.Reset();
   weight = default_weights[residual_.current_mode_];
 }
 
 void Interact::EditKeyframe() {
-  if (evaluator.episode.motion_strategy.EditCurrentKeyframe(kf_name)) {
-    // SyncWeightsToKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
+  if (motion_strategy_.EditCurrentKeyframe(kf_name)) {
+    SyncWeightsToKeyframe(motion_strategy_.GetCurrentKeyframe());
     kf_index_updated = true;
   }
 }
 
 void humanoid::Interact::SaveKeyframe() {
-  if (kf_index >= evaluator.episode.motion_strategy.GetKeyframesCount()) {
+  if (kf_index >= motion_strategy_.GetKeyframesCount()) {
     std::printf("Keyframe index %d out of range, add keyframe first", kf_index);
     return;
   }
-  SyncWeightsToKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-  evaluator.episode.motion_strategy.SaveCurrentKeyframe();
-  kf_index = evaluator.episode.motion_strategy.GetCurrentKeyframeIndex();
+  SyncWeightsToKeyframe(motion_strategy_.GetCurrentKeyframe());
+  motion_strategy_.SaveCurrentKeyframe();
+  kf_index = motion_strategy_.GetCurrentKeyframeIndex();
 }
 
 void humanoid::Interact::LoadKeyframe() {
-  if (evaluator.episode.motion_strategy.LoadKeyframe(kf_name)) {
-    SyncWeightsFromKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-    kf_index = evaluator.episode.motion_strategy.GetCurrentKeyframeIndex();
+  if (motion_strategy_.LoadKeyframe(kf_name)) {
+    SyncWeightsFromKeyframe(motion_strategy_.GetCurrentKeyframe());
+    kf_index = motion_strategy_.GetCurrentKeyframeIndex();
   }
 }
 
 void humanoid::Interact::SaveKeyframeSequence() {
-  SyncWeightsToKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-  evaluator.episode.motion_strategy.UpdateCurrentKeyframe(kf_index);
+  SyncWeightsToKeyframe(motion_strategy_.GetCurrentKeyframe());
+  motion_strategy_.UpdateCurrentKeyframe(kf_index);
 
-  evaluator.episode.motion_strategy.SaveStrategy(kf_name, 
+  motion_strategy_.SaveStrategy(kf_name, 
                                 CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX);
 }
 
 void humanoid::Interact::LoadKeyframeSequence() {
-  if (evaluator.episode.motion_strategy.LoadStrategy(kf_name, 
+  if (motion_strategy_.LoadStrategy(kf_name, 
                                     CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX)) {
-    SyncWeightsFromKeyframe(evaluator.episode.motion_strategy.GetCurrentKeyframe());
-    kf_index = evaluator.episode.motion_strategy.GetCurrentKeyframeIndex();
+    SyncWeightsFromKeyframe(motion_strategy_.GetCurrentKeyframe());
+    kf_index = motion_strategy_.GetCurrentKeyframeIndex();
   }
 }
 
@@ -419,7 +378,7 @@ void Interact::SyncWeightsFromKeyframe(const ContactKeyframe& kf) {
 
 void Interact::SetSelectedPoint(const mjtNum* selpos, const mjtNum selbody,
                         const mjtNum selgeom) {
-  ContactKeyframe& current_keyframe = evaluator.episode.motion_strategy.GetCurrentKeyframe();
+  ContactKeyframe& current_keyframe = motion_strategy_.GetCurrentKeyframe();
 
   // select Contact process
   int contact_pair_index = ReinterpretAsInt(parameters[CONTACT_POINT_PARAM_INDEX]) - 1;
@@ -468,9 +427,9 @@ void Interact::SetSelectedPoint(const mjtNum* selpos, const mjtNum selbody,
 }
 
 void Interact::SetContactKeyframes(const std::vector<ContactKeyframe>& keyframes, const int current_index) {
-  evaluator.episode.motion_strategy.SetContactKeyframes(keyframes);
-  if (current_index >= 0 && current_index < evaluator.episode.motion_strategy.GetKeyframesCount())
-    evaluator.episode.motion_strategy.UpdateCurrentKeyframe(current_index);
+  motion_strategy_.SetContactKeyframes(keyframes);
+  if (current_index >= 0 && current_index < motion_strategy_.GetKeyframesCount())
+    motion_strategy_.UpdateCurrentKeyframe(current_index);
 }
 
 double Interact::CalculatePushForce(const mjModel* model, const mjData* data, const int geom1, const int geom2) const {
@@ -538,7 +497,7 @@ double Interact::CalculateKeyframeError(const ContactKeyframe& keyframe, mjData*
 // draw task-related geometry in the scene
 void Interact::ModifyScene(const mjModel* model, const mjData* data,
                            mjvScene* scene) const {
-  const ContactKeyframe& current_keyframe = evaluator.episode.motion_strategy.GetCurrentKeyframe();
+  const ContactKeyframe& current_keyframe = motion_strategy_.GetCurrentKeyframe();
 
   const float rgba[CONTACT_PAIR_COUNT][4] = {
     // {1, 0, 1, 0.3}, // purple

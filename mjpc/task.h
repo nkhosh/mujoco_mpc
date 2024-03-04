@@ -22,7 +22,6 @@
 
 #include <mujoco/mujoco.h>
 #include "mjpc/norm.h"
-#include "mjpc/evaluator.h"
 
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
@@ -151,10 +150,6 @@ class Task {
   int kf_index = 0;
   char kf_name[mjMAXUITEXT] = "";
   int kf_weights = true;
-
-  // evaluation stats
-  mjpc::Evaluator evaluator;
-  bool evaluation_mode = false;
 
   // residual parameters
   std::vector<double> parameters;

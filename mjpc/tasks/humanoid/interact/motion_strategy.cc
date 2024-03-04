@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #include "motion_strategy.h"
-
 #include "mjpc/utilities.h"
   
 #include <fstream>

@@ -17,7 +17,6 @@
 
 #include <mujoco/mujoco.h>
 #include "contact_keyframe.h"
-#include <mjpc/sim_state.h>
 
 #include <filesystem>
 #include <nlohmann/json.hpp>
@@ -37,9 +36,7 @@ class MotionStrategy {
     MotionStrategy() = default;
     ~MotionStrategy() = default;
 
-    MotionStrategy(const SimState& initial_state, 
-                   const std::vector<ContactKeyframe>& keyframes) : 
-                   home_state(initial_state),
+    MotionStrategy(const std::vector<ContactKeyframe>& keyframes) :
                    contact_keyframes_(keyframes),
                    current_keyframe_(ContactKeyframe()),
                    current_keyframe_index_(0) {}
@@ -58,9 +55,6 @@ class MotionStrategy {
     std::vector<ContactKeyframe>& GetContactKeyframes() { return contact_keyframes_; }
     const std::vector<ContactKeyframe>& GetContactKeyframes() const { return contact_keyframes_; }
     const int GetKeyframesCount() const { return contact_keyframes_.size(); }
-    
-    const SimState& GetHomeState() const { return home_state; }
-    void SetHomeState(const SimState& state) { home_state = state; }
 
     // Sync weights
     // Sync kf_name and kf_index
@@ -71,15 +65,11 @@ class MotionStrategy {
     }
     void SetContactKeyframes(const std::vector<ContactKeyframe>& keyframes) { contact_keyframes_ = keyframes; }
 
-    // Edit keyframe sequence commands: Add, Edit, Save, Delete
+    // Keyframe sequence commands: Add, Edit, Save, Delete
     bool AddCurrentKeyframe(const std::string& kf_name = "");
-    // void AddKeyframe(const ContactKeyframe& keyframe);
     int NextKeyframe();
-    // void PreviousKeyframe();
-    // void RemoveKeyframe(const int index);
     bool RemoveCurrentKeyframe();
     void ClearKeyframes();
-    // void EditKeyframe(const int index);
     bool EditCurrentKeyframe(const std::string& kf_name = "");
     bool SaveCurrentKeyframe();
     bool LoadKeyframe(const std::string& kf_name);
@@ -87,8 +77,6 @@ class MotionStrategy {
     bool LoadStrategy(const std::string& name, const std::string& path = CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX);
 
   private:
-    SimState home_state;
-    
     std::vector<ContactKeyframe> contact_keyframes_;
     ContactKeyframe current_keyframe_;
     int current_keyframe_index_;

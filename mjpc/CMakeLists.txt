@@ -142,14 +142,8 @@ add_library(
   spline/spline.h
   app.cc
   app.h
-  evaluator.cc
-  evaluator.h
-  motion_phase.cc
-  motion_phase.h
   norm.cc
   norm.h
-  sim_state.cc
-  sim_state.h
   simulate.cc
   simulate.h
   task.cc
