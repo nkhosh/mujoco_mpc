@@ -2,7 +2,7 @@
   <include file="../../common.xml"/>
   <!-- modified from: https://github.com/google-deepmind/dm_control/blob/main/dm_control/suite/humanoid.xml -->
   <include file="../humanoid_modified.xml" />
-  <!-- <include file="./scenes/armchair.xml"/> -->
+  <include file="./scenes/armchair.xml"/>
   <!-- <include file="./scenes/armchair_stand.xml"/> -->
   <!-- <include file="./scenes/armchair_tilted.xml"/> -->
   <!-- <include file="./scenes/armchair_short.xml"/> -->
@@ -19,7 +19,7 @@
   <!-- <include file="./scenes/climbing_wall.xml"/> -->
   <!-- <include file="./scenes/moveable_stool.xml"/> -->
   <!-- <include file="./scenes/hammock.xml"/> -->
-  <include file="./scenes/bench.xml"/>
+  <!-- <include file="./scenes/bench.xml"/> -->
   <!-- <include file="./scenes/bench_short.xml"/> -->
   <!-- <include file="./scenes/bench_tall.xml"/> -->
   <!-- <include file="./scenes/bench_sidetilted.xml"/> -->

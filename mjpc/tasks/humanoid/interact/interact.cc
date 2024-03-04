@@ -221,10 +221,10 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
   if (residual_.current_contact_mode_ != contact_mode) {
     residual_.current_contact_mode_ = (ContactMode)contact_mode;
     kf_index_updated = true;
-    if (!evaluator.is_reoptimizing) {
+    // if (!evaluator.is_reoptimizing) {
       kf_index = 0;
       evaluator.episode.current_phase_index = 0;
-    }
+    // }
   }
 
   // --------------------------- Keyframe sequence handling -------------------------------
@@ -246,47 +246,47 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
       // the case where the episode fails due to time out, we restart the simulation and go to next episode
       if (evaluator.GetPhaseDuration(data) > current_keyframe.time_limit &&
               kf_distance_error >= current_keyframe.target_distance_tolerance) {
-        evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
+        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
 
         // don't go to the next episode if we are reoptimizing
-        if (!evaluator.is_reoptimizing) {
+        // if (!evaluator.is_reoptimizing) {
           kf_index = 0;
           kf_index_updated = true;
-          evaluator.reset_sim_required = true;
-          evaluator.GoToNextEpisode(false, evaluation_mode);
-        }
+          // evaluator.reset_sim_required = true;
+          // evaluator.GoToNextEpisode(false, evaluation_mode);
+        // }
       }
       // the case where the episode succeeds, we restart the simulation and go to next episode
       else if (kf_index == evaluator.episode.motion_strategy.GetKeyframesCount() - 1 &&
           kf_distance_error <= current_keyframe.target_distance_tolerance &&
           evaluator.GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
-        evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
+        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
 
         // don't go to the next episode if we are reoptimizing
-        if (!evaluator.is_reoptimizing) {
+        // if (!evaluator.is_reoptimizing) {
           kf_index = 0;
           kf_index_updated = true;
           evaluator.first_success_time = data->time;
-          evaluator.reset_sim_required = true;
-          evaluator.GoToNextEpisode(true, evaluation_mode);
-        }
+          // evaluator.reset_sim_required = true;
+          // evaluator.GoToNextEpisode(true, evaluation_mode);
+        // }
       }
       // the case where the current keyframe succeeds, we move on to the next keyframe within the same episode
       else if (kf_distance_error <= current_keyframe.target_distance_tolerance &&
           evaluator.GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
-        evaluator.episode.GetCurrentPhase().success = true;
-        evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
+        // evaluator.episode.GetCurrentPhase().success = true;
+        // evaluator.episode.GetCurrentPhase().SetLastState(evaluator.episode.GetCurrentPhase().current_state);
         
-        SimState current_state = evaluator.episode.GetCurrentPhase().GetLastState();
-        evaluator.episode.GetCurrentPhase().fixed = true;
+        // SimState current_state = evaluator.episode.GetCurrentPhase().GetLastState();
+        // evaluator.episode.GetCurrentPhase().fixed = true;
 
         kf_index++;
         evaluator.episode.current_phase_index = kf_index;
-        evaluator.episode.GetCurrentPhase().SetStartState(current_state);
-        evaluator.episode.GetCurrentPhase().AddState(current_state);
+        // evaluator.episode.GetCurrentPhase().SetStartState(current_state);
+        // evaluator.episode.GetCurrentPhase().AddState(current_state);
 
         kf_index_updated = true;
-        evaluator.phase_start_time = data->time;
+        // evaluator.phase_start_time = data->time;
         evaluator.first_success_time = data->time;
       }
       // the case where the distance error is more than the tolerance, we reset success timer
@@ -296,12 +296,12 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
       }
       
       // when we have the set number of episodes we save the episodes data and reset the evaluator
-      if (evaluation_mode && evaluator.episode_count >= evaluator.max_num_episodes) {
-        // Save the evaluation info
-        evaluator.SaveData();
-        evaluation_mode = false;
-        evaluator.Reset();
-      }
+      // if (evaluation_mode && evaluator.episode_count >= evaluator.max_num_episodes) {
+      //   // Save the evaluation info
+      //   evaluator.SaveData();
+      //   evaluation_mode = false; 
+      //   evaluator.Reset();
+      // }
     }
 
     assert(kf_index < evaluator.episode.motion_strategy.GetKeyframesCount());
