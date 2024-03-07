@@ -38,8 +38,7 @@ class MotionStrategy {
 
     MotionStrategy(const std::vector<ContactKeyframe>& keyframes) :
                    contact_keyframes_(keyframes),
-                   current_keyframe_(ContactKeyframe()),
-                   current_keyframe_index_(0) {}
+                   current_keyframe_(ContactKeyframe()) {}
 
     void Reset();
 
@@ -51,7 +50,7 @@ class MotionStrategy {
       return current_keyframe_;
     }
 
-    const int GetCurrentKeyframeIndex() const { return current_keyframe_index_; }
+    const int GetCurrentKeyframeIndex() const { return kf_index; }
     std::vector<ContactKeyframe>& GetContactKeyframes() { return contact_keyframes_; }
     const std::vector<ContactKeyframe>& GetContactKeyframes() const { return contact_keyframes_; }
     const int GetKeyframesCount() const { return contact_keyframes_.size(); }
@@ -59,9 +58,8 @@ class MotionStrategy {
     // Sync weights
     // Sync kf_name and kf_index
     // void SetIndex(const int index) { current_keyframe_index_ = index; } // should I guard this here
-    void UpdateCurrentKeyframe(const int index) { 
-      current_keyframe_index_ = index; 
-      current_keyframe_ = contact_keyframes_[current_keyframe_index_]; 
+    void UpdateCurrentKeyframe(const int index) {
+      current_keyframe_ = contact_keyframes_[kf_index]; 
     }
     void SetContactKeyframes(const std::vector<ContactKeyframe>& keyframes) { contact_keyframes_ = keyframes; }
 
@@ -83,7 +81,6 @@ class MotionStrategy {
   private:
     std::vector<ContactKeyframe> contact_keyframes_;
     ContactKeyframe current_keyframe_;
-    int current_keyframe_index_;
 };
 
 void to_json(json& j, const MotionStrategy& strategy);

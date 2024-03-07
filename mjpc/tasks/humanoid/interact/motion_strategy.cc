@@ -22,36 +22,37 @@ namespace mjpc::humanoid {
 void MotionStrategy::Reset() {
   contact_keyframes_.clear();
   current_keyframe_.Reset();
-  current_keyframe_index_ = 0;
+  kf_index = 0;
 }
 
 bool MotionStrategy::AddCurrentKeyframe(const std::string& kf_name) {
-  current_keyframe_.name = std::string(kf_name).empty() ? std::to_string(current_keyframe_index_) : std::string(kf_name);
+  current_keyframe_.name = std::string(kf_name).empty() ? std::to_string(kf_index) : std::string(kf_name);
   contact_keyframes_.push_back(current_keyframe_);
-  current_keyframe_index_ = contact_keyframes_.size() - 1;
+  kf_index = contact_keyframes_.size() - 1;
   std::printf("\nAdded keyframe %lu", contact_keyframes_.size());
   return true;
 }
 
 int MotionStrategy::NextKeyframe() {
-  current_keyframe_index_ = (current_keyframe_index_ + 1) % contact_keyframes_.size();
+  // TODO: this currently doesn't work when in contact_mode
+  kf_index = (kf_index + 1) % contact_keyframes_.size();
 
-  std::printf("\nCurrent keyframe: %d", current_keyframe_index_);
-  current_keyframe_ = contact_keyframes_[current_keyframe_index_];
+  std::printf("\nCurrent keyframe: %d", kf_index);
+  current_keyframe_ = contact_keyframes_[kf_index];
 
-  return current_keyframe_index_;
+  return kf_index;
 }
 
 bool MotionStrategy::RemoveCurrentKeyframe() {
   if (contact_keyframes_.empty())
     return false;
   
-  contact_keyframes_.erase(contact_keyframes_.begin() + current_keyframe_index_);
+  contact_keyframes_.erase(contact_keyframes_.begin() + kf_index);
 
-  if (current_keyframe_index_ >= contact_keyframes_.size())
-    current_keyframe_index_ = contact_keyframes_.size() - 1;
+  if (kf_index >= contact_keyframes_.size())
+    kf_index = contact_keyframes_.size() - 1;
 
-  current_keyframe_ = contact_keyframes_[current_keyframe_index_];
+  current_keyframe_ = contact_keyframes_[kf_index];
   std::printf("\nRemoved keyframe %lu", contact_keyframes_.size());
   return true;
 }
@@ -59,29 +60,29 @@ bool MotionStrategy::RemoveCurrentKeyframe() {
 void MotionStrategy::ClearKeyframes() {
   contact_keyframes_.clear();
   current_keyframe_.Reset();
-  current_keyframe_index_ = 0;
+  kf_index = 0;
   std::printf("\nCleared keyframes, current length: %lu", contact_keyframes_.size());
 }
 
 bool MotionStrategy::EditCurrentKeyframe(const std::string& kf_name) {
-  if (current_keyframe_index_ > contact_keyframes_.size()) 
+  if (kf_index > contact_keyframes_.size()) 
     return false;
 
-  current_keyframe_.name = std::string(kf_name).empty() ? std::to_string(current_keyframe_index_) : std::string(kf_name);
-  contact_keyframes_[current_keyframe_index_] = current_keyframe_;
+  current_keyframe_.name = std::string(kf_name).empty() ? std::to_string(kf_index) : std::string(kf_name);
+  contact_keyframes_[kf_index] = current_keyframe_;
 
-  std::printf("\nEdited keyframe %d", current_keyframe_index_);
+  std::printf("\nEdited keyframe %d", kf_index);
   return true;
 }
 
 bool MotionStrategy::SaveCurrentKeyframe() {
   // TODO IN CALLING
-    if (current_keyframe_index_ >= contact_keyframes_.size() || current_keyframe_index_ < 0) {
-      std::printf("\nKeyframe index %d out of range, add keyframe first", current_keyframe_index_);
+    if (kf_index >= contact_keyframes_.size() || kf_index < 0) {
+      std::printf("\nKeyframe index %d out of range, add keyframe first", kf_index);
       return false;
     }
 
-    contact_keyframes_[current_keyframe_index_] = current_keyframe_; // TODO Do we need this?
+    contact_keyframes_[kf_index] = current_keyframe_; // TODO Do we need this?
 
     json j_kf;
     to_json(j_kf, current_keyframe_);
@@ -175,7 +176,7 @@ bool MotionStrategy::LoadStrategy(const std::string& name, const std::string& pa
       current_keyframe_ = contact_keyframes_[0];
     }
 
-    current_keyframe_index_ = 0;
+    kf_index = 0;
     std::printf("\nKeyframe sequence loaded from %s", filename.c_str());
     // SyncWeightsFromKeyframe(current_keyframe_); // TODO
     return true;

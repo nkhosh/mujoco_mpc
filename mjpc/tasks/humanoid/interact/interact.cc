@@ -296,14 +296,12 @@ void Interact::NextKeyframe() {
 void Interact::RemoveKeyframe() {
   if (motion_strategy.RemoveCurrentKeyframe()) {
     SyncWeightsFromKeyframe(motion_strategy.GetCurrentKeyframe());
-    motion_strategy.kf_index = motion_strategy.GetCurrentKeyframeIndex();
     kf_index_updated = true;
   }
 }
 
 void Interact::ClearKeyframes() {
   motion_strategy.ClearKeyframes();
-  motion_strategy.kf_index = motion_strategy.GetCurrentKeyframeIndex();
   residual_.residual_keyframe_.Reset();
   weight = default_weights[residual_.current_mode_];
 }
@@ -322,13 +320,11 @@ void humanoid::Interact::SaveKeyframe() {
   }
   SyncWeightsToKeyframe(motion_strategy.GetCurrentKeyframe());
   motion_strategy.SaveCurrentKeyframe();
-  motion_strategy.kf_index = motion_strategy.GetCurrentKeyframeIndex();
 }
 
 void humanoid::Interact::LoadKeyframe() {
   if (motion_strategy.LoadKeyframe(motion_strategy.kf_name)) {
     SyncWeightsFromKeyframe(motion_strategy.GetCurrentKeyframe());
-    motion_strategy.kf_index = motion_strategy.GetCurrentKeyframeIndex();
   }
 }
 
@@ -344,7 +340,6 @@ void humanoid::Interact::LoadKeyframeSequence() {
   if (motion_strategy.LoadStrategy(motion_strategy.kf_name, 
                                     CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX)) {
     SyncWeightsFromKeyframe(motion_strategy.GetCurrentKeyframe());
-    motion_strategy.kf_index = motion_strategy.GetCurrentKeyframeIndex();
   }
 }
 
