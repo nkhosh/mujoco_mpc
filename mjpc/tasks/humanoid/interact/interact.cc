@@ -108,9 +108,6 @@ void Interact::ResidualFn::ContactResidual(const mjModel* model, const mjData* d
   for (int i=0; i<CONTACT_PAIR_COUNT; i++) {
     const ContactPair& contact = residual_keyframe_.contact_pairs[i];
     if (contact.body1 != NOT_SELECTED && contact.body2 != NOT_SELECTED) {
-      // if part != -1 then check if the body id is in the body part's ids, 
-      // if yes proceed and if not then set this residual to 0 and continue
-
       mjtNum tmp1[3];
       mjtNum selected_global_pos1[3];
       mju_mulMatVec(tmp1, 
@@ -232,17 +229,14 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
   if (motion_strategy.HasKeyframes()) {
     if ((ContactMode)contact_mode == kContact) {
       kf_distance_error = CalculateKeyframeError(current_keyframe, data);
-       
-      // the case where the episode fails due to time out, we restart the simulation and go to next episode
-      if (GetPhaseDuration(data) > current_keyframe.time_limit &&
-              kf_distance_error >= current_keyframe.target_distance_tolerance) {
-        motion_strategy.kf_index = 0;
-        kf_index_updated = true;
-      }
-      // the case where the episode succeeds, we restart the simulation and go to next episode
-      else if (motion_strategy.kf_index == motion_strategy.GetKeyframesCount() - 1 &&
-          kf_distance_error <= current_keyframe.target_distance_tolerance &&
-          GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
+      
+      if (  // the case where the episode fails due to time out, we restart the sequence
+            (GetKeyframeDuration(data) > current_keyframe.time_limit &&
+            kf_distance_error >= current_keyframe.target_distance_tolerance) || 
+            // the case where the episode succeeds, we restart the sequence
+            (motion_strategy.kf_index == motion_strategy.GetKeyframesCount() - 1 &&
+            kf_distance_error <= current_keyframe.target_distance_tolerance &&
+            GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time)) {
           motion_strategy.kf_index = 0;
           kf_index_updated = true;
           first_success_time = data->time;
@@ -251,9 +245,8 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
       else if (kf_distance_error <= current_keyframe.target_distance_tolerance &&
           GetSuccessSustainTime(data) >= current_keyframe.success_sustain_time) {
         motion_strategy.kf_index++;
-
         kf_index_updated = true;
-        phase_start_time = data->time;
+        kf_start_time = data->time;
         first_success_time = data->time;
       }
       // the case where the distance error is more than the tolerance, we reset success timer
@@ -263,11 +256,8 @@ void Interact::TransitionLocked(mjModel* model, mjData* data) {
       }
     }
 
-    assert(motion_strategy.kf_index < motion_strategy.GetKeyframesCount());
-
     // --------------------------- Updating keyframe -------------------------------------------
     if (kf_index_updated) {
-      // current_keyframe_ = contact_keyframes_.at(motion_strategy.kf_index);
       motion_strategy.UpdateCurrentKeyframe(motion_strategy.kf_index);
       ContactKeyframe current_keyframe = motion_strategy.GetCurrentKeyframe();
       residual_.residual_keyframe_ = current_keyframe;
@@ -289,7 +279,7 @@ void Interact::AddKeyframe() {
 
 void Interact::NextKeyframe() {
   motion_strategy.kf_index = motion_strategy.NextKeyframe();
-  // SyncWeightsFromKeyframe(motion_strategy.GetCurrentKeyframe());
+  SyncWeightsFromKeyframe(motion_strategy.GetCurrentKeyframe());
   kf_index_updated = true;
 }
 

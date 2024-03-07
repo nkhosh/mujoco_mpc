@@ -55,9 +55,6 @@ class MotionStrategy {
     const std::vector<ContactKeyframe>& GetContactKeyframes() const { return contact_keyframes_; }
     const int GetKeyframesCount() const { return contact_keyframes_.size(); }
 
-    // Sync weights
-    // Sync kf_name and kf_index
-    // void SetIndex(const int index) { current_keyframe_index_ = index; } // should I guard this here
     void UpdateCurrentKeyframe(const int index) {
       current_keyframe_ = contact_keyframes_[kf_index]; 
     }
