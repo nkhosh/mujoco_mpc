@@ -539,9 +539,9 @@ void Agent::GUI(mjUI& ui) {
       {mjITEM_BUTTON, "Save sequence", 2, nullptr, ""},   // 11
       {mjITEM_BUTTON, "Load sequence", 2, nullptr, ""},   // 12
       {mjITEM_SLIDERNUM, "Risk", 1, &ActiveTask()->risk, "-1 1"},
-      {mjITEM_CHECKINT, "KF Weights", 2, &ActiveTask()->kf_weights, ""},
-      {mjITEM_EDITINT, "KF Index", 2, &ActiveTask()->kf_index, "1 0 20"},
-      {mjITEM_EDITTXT, "KF Name", 2, ActiveTask()->kf_name, "0"},
+      {mjITEM_CHECKINT, "KF Weights", 2, &ActiveTask()->motion_strategy.kf_weights, ""},
+      {mjITEM_EDITINT, "KF Index", 2, &ActiveTask()->motion_strategy.kf_index, "1 0 20"},
+      {mjITEM_EDITTXT, "KF Name", 2, ActiveTask()->motion_strategy.kf_name, "0"},
       {mjITEM_SEPARATOR, "Weights", 1},
       {mjITEM_END}};
 

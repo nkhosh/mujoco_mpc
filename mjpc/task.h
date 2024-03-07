@@ -23,6 +23,7 @@
 #include <mujoco/mujoco.h>
 #include "mjpc/norm.h"
 
+#include "mjpc/tasks/humanoid/interact/motion_strategy.h"
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -147,9 +148,7 @@ class Task {
   std::vector<std::string> weight_names;
 
   double risk;
-  int kf_index = 0;
-  char kf_name[mjMAXUITEXT] = "";
-  int kf_weights = true;
+  humanoid::MotionStrategy motion_strategy;
 
   // residual parameters
   std::vector<double> parameters;

@@ -153,8 +153,6 @@ class Interact : public Task {
  private:
   ResidualFn residual_;
 
-  MotionStrategy motion_strategy_;
-
   // draw task-related geometry in the scene
   void ModifyScene(const mjModel* model, const mjData* data,
                    mjvScene* scene) const override;

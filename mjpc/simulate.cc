@@ -1518,7 +1518,7 @@ void UiEvent(mjuiState* state) {
         mju_sub3(tmp, selpnt, d->xpos+3*bodyid);
         mju_mulMatTVec(sellocalpos, d->xmat+9*bodyid, tmp, 3, 3);
 
-        ((mjpc::humanoid::Interact*)sim->agent->ActiveTask())->SetSelectedPoint(sellocalpos, bodyid, selgeom);
+        static_cast<mjpc::humanoid::Interact*>(sim->agent->ActiveTask())->SetSelectedPoint(sellocalpos, bodyid, selgeom);
       }
 
       // set lookat point, start tracking is requested

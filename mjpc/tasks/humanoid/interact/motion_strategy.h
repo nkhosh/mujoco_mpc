@@ -76,6 +76,10 @@ class MotionStrategy {
     bool SaveStrategy(const std::string& name, const std::string& path = CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX);
     bool LoadStrategy(const std::string& name, const std::string& path = CONTACT_KEYFRAME_SEQUENCE_FILENAME_PREFIX);
 
+    int kf_index = 0;
+    char kf_name[mjMAXUITEXT] = "";
+    int kf_weights = true;
+
   private:
     std::vector<ContactKeyframe> contact_keyframes_;
     ContactKeyframe current_keyframe_;
