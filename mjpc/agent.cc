@@ -753,47 +753,47 @@ void Agent::TaskEvent(mjuiItem* it, mjData* data,
       break;
     case 4:  // add keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") { 
-        ((mjpc::humanoid::Interact*)ActiveTask())->AddKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->AddKeyframe();
       }
       break;
     case 5:  // remove keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->RemoveKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->RemoveKeyframe();
       }
       break;
     case 6:  // edit current keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->EditKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->EditKeyframe();
       }
       break;
     case 7:  // next keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->NextKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->NextKeyframe();
       }
       break;
     case 8:  // save current keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->SaveKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->SaveKeyframe();
       }
       break;
     case 9:  // load onto current keyframe
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->LoadKeyframe();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->LoadKeyframe();
       }
       break;
     case 10:  // clear all keyframes
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->ClearKeyframes();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->ClearKeyframes();
       }
       break;
     case 11:  // save a sequence of keyframes
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->SaveKeyframeSequence();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->SaveKeyframeSequence();
       }
       break;
     case 12:  // load a sequence of keyframes
       if (ActiveTask()->Name() == "Humanoid Interact") {
-        ((mjpc::humanoid::Interact*)ActiveTask())->LoadKeyframeSequence();
+        static_cast<mjpc::humanoid::Interact*>(ActiveTask())->LoadKeyframeSequence();
       }
       break;
   }
